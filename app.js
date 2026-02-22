@@ -18,22 +18,20 @@ var server = http.createServer(function (req, res) {
         req.on('end', function() {
             if (req.url === '/') {
                 log('Received message: ' + body);
-            } else if (req.url = '/scheduled') {
-                log('Received task ' + req.headers['x-aws-sqsd-taskname'] + ' scheduled at ' + req.headers['x-aws-sqsd-scheduled-at']);
+            } else if (req.url === '/scheduled') {   // FIXED HERE
+                log('Received task ' + req.headers['x-aws-sqsd-taskname'] +
+                    ' scheduled at ' + req.headers['x-aws-sqsd-scheduled-at']);
             }
 
-            res.writeHead(200, 'OK', {'Content-Type': 'text/plain'});
+            res.writeHead(200, {'Content-Type': 'text/plain'});
             res.end();
         });
     } else {
-        res.writeHead(200);
-        res.write(html);
-        res.end();
+        res.writeHead(200, {'Content-Type': 'text/html'});
+        res.end(html);
     }
 });
 
-// Listen on port 3000, IP defaults to 127.0.0.1
-server.listen(port);
+server.listen(port, '0.0.0.0');   // FIXED HERE
 
-// Put a friendly message on the terminal
-console.log('Server running at http://127.0.0.1:' + port + '/');
+console.log('Server running on port ' + port);
